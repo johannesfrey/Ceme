@@ -18,7 +18,7 @@ void skip_whitespace(FILE *in_stream)
   }
 }
 
-object* read_num(FILE *in_stream, int first)
+object* read_number(FILE *in_stream, int first)
 {
   int ch;
   int val = 0;
@@ -32,7 +32,7 @@ object* read_num(FILE *in_stream, int first)
   }
   ungetc(ch, in_stream);
 
-  return alloc_num(val);
+  return alloc_number(val);
 }
 
 object* read(FILE *in_stream)
@@ -45,7 +45,7 @@ object* read(FILE *in_stream)
 
   if (isdigit(ch))
   {
-    return read_num(in_stream, ch);
+    return read_number(in_stream, ch);
   } 
   else
   {

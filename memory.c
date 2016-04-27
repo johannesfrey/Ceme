@@ -2,19 +2,12 @@
 
 #include "memory.h"
 
-object* alloc_object()
+object* alloc_number(int64_t value)
 {
-  object *obj;
-
-  obj = (object *)(malloc(sizeof(object)));
-  return obj;
-}
-
-object* alloc_num(int64_t value)
-{
-  object *obj = alloc_object();
-  obj->type = T_NUM;
-  obj->u.num.num_val = value;
-  return obj;
+  number_object *num_obj;
+  num_obj = (number_object *)(malloc(sizeof(number_object)));
+  num_obj->type = T_NUMBER;
+  num_obj->value = value;
+  return (object *)num_obj;
 }
 

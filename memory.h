@@ -8,17 +8,17 @@
 //
 
 typedef enum {
-  T_NUM
+  T_NUMBER
 } object_type;
 
-struct num_object {
-  int64_t num_val;
-};
+typedef struct number_object {
+  object_type type;
+  int64_t value;
+} number_object;
 
 typedef struct object {
-  object_type type;
   union {
-    struct num_object num;
+    struct number_object number;
   } u;
 } object;
 
@@ -26,6 +26,6 @@ typedef struct object {
 // Allocator functions
 //
 
-object* alloc_num(int64_t value);
+object* alloc_number(int64_t value);
 
 #endif

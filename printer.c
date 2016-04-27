@@ -7,8 +7,8 @@ void print(object *obj)
 {
   switch (obj->type)
   {
-    case T_NUM:
-      printf("%lld", obj->u.num.num_val);
+    case T_NUMBER:
+      printf("%lld", obj->u.number.value);
       break;
     default:
       fprintf(stderr, "unimplemented\n");
