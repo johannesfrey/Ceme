@@ -5,6 +5,6 @@
 
 #include "memory.h"
 
-object* read(FILE *in_stream);
+object* read_object(FILE *in_stream);
 
 #endif

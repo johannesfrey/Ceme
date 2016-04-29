@@ -35,7 +35,7 @@ object* read_number(FILE *in_stream, int first)
   return alloc_number(val);
 }
 
-object* read(FILE *in_stream)
+object* read_object(FILE *in_stream)
 {
   int ch;
 
@@ -49,8 +49,8 @@ object* read(FILE *in_stream)
   } 
   else
   {
-      printf("Only fixed numbers for now\n");
-      exit(1);
+    printf("Only fixed numbers for now\n");
+    exit(0);
   }
 }
 

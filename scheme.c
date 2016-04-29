@@ -11,7 +11,7 @@ int main()
   for (;;)
   {
     printf("> ");
-    print(eval(read(stdin)));
+    print(eval(read_object(stdin)));
     printf("\n");
   }
 
