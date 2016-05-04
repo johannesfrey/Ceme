@@ -5,8 +5,7 @@
 
 void print(object *obj)
 {
-  switch (obj->u.any.type)
-  {
+  switch (obj->u.any.type) {
     case T_NUMBER:
       printf("%lld", obj->u.number.value);
       break;

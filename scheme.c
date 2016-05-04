@@ -8,8 +8,7 @@ int main()
 {
   printf("Welcome to Scheme.\n");
 
-  for (;;)
-  {
+  for (;;) {
     printf("> ");
     print(eval(read_object(stdin)));
     printf("\n");

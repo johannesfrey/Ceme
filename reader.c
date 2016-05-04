@@ -8,10 +8,8 @@ void skip_whitespace(FILE *in_stream)
 {
   int ch;
 
-  while ((ch = getc(in_stream)) != EOF)
-  {
-    if (isspace(ch))
-    {
+  while ((ch = getc(in_stream)) != EOF) {
+    if (isspace(ch)) {
       continue;
     }
     ungetc(ch, in_stream);
@@ -27,8 +25,7 @@ object* read_number(FILE *in_stream, int first)
   // ASCII digits are encoded ascending so we can
   // subtract by char 0 for the real value
   val = first - '0';
-  while (isdigit(ch = getc(in_stream)))
-  {
+  while (isdigit(ch = getc(in_stream))) {
     val = val * 10 + (ch - '0');
   }
   ungetc(ch, in_stream);
@@ -46,14 +43,11 @@ object* read_string(FILE *in_stream)
   chars = malloc(current_buffer_size);
   ch = getc(in_stream);
 
-  while ((ch != '"') && (ch != EOF))
-  {
+  while ((ch != '"') && (ch != EOF)) {
     // Check for special characters
-    if (ch == '\\')
-    {
+    if (ch == '\\') {
       ch = getc(in_stream);
-      switch (ch)
-      {
+      switch (ch) {
         case EOF:
           log_err("Unterminated string");
           break;
@@ -72,8 +66,7 @@ object* read_string(FILE *in_stream)
     }
 
     chars[current_used_size++] = ch;
-    if (current_used_size == current_buffer_size)
-    {
+    if (current_used_size == current_buffer_size) {
       int new_buffer_size = current_buffer_size * 2;
 
       chars = realloc(chars, new_buffer_size);
@@ -97,16 +90,13 @@ object* read_object(FILE *in_stream)
 
   ch = getc(in_stream);
 
-  if (isdigit(ch))
-  {
+  if (isdigit(ch)) {
     return read_number(in_stream, ch);
   }
-  if (ch == '"')
-  {
+  if (ch == '"') {
     return read_string(in_stream);
   }
-  else
-  {
+  else {
     printf("Only numbers and strings for now\n");
     exit(0);
   }
