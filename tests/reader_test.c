@@ -49,6 +49,22 @@ int test_reader()
   check(obj->u.any.type == T_NUMBER, "Not of type T_NUMBER");
   check(obj->u.number.value == 123, "Bad value for Number");
 
+  // Check for T_STRING types
+  check(input = write_to_testfile("\"abc\""), "write_to_testfile failed");
+  obj = read_object(input);
+  check(obj->u.any.type == T_STRING, "Not of type T_STRING");
+  check((strcmp(obj->u.string.value, "abc") == 0), "Bad value for String");
+
+  check(input = write_to_testfile("\"abc\\td\""), "write_to_testfile failed");
+  obj = read_object(input);
+  check(obj->u.any.type == T_STRING, "Not of type T_STRING");
+  check((strcmp(obj->u.string.value, "abc\td") == 0), "Bad value for String");
+
+  check(input = write_to_testfile("\"abc\\nd\""), "write_to_testfile failed");
+  obj = read_object(input);
+  check(obj->u.any.type == T_STRING, "Not of type T_STRING");
+  check((strcmp(obj->u.string.value, "abc\nd") == 0), "Bad value for String");
+  
   fclose(input);
 
   return 0;
