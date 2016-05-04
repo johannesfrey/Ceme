@@ -1,6 +1,9 @@
 OBJS = memory.o reader.o eval.o printer.o 
 CFLAGS = -g -Wall -std=gnu99
 
+run: tests/*.c scheme
+	cd tests; make tests
+
 scheme: scheme.c $(OBJS)
 	gcc scheme.c $(OBJS) -o scheme
 

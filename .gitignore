@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/osx,c,vim
 
 scheme
+tests/reader_test
+tests/reader_test_file
 
 ### OSX ###
 .DS_Store
