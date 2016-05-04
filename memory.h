@@ -11,14 +11,14 @@ typedef enum {
   T_NUMBER
 } object_type;
 
-typedef struct any_object {
+struct any_object {
   object_type type;
-} any_object;
+};
 
-typedef struct number_object {
+struct number_object {
   object_type type;
   int64_t value;
-} number_object;
+};
 
 typedef struct object {
   union {
