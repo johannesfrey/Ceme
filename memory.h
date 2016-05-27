@@ -9,7 +9,12 @@
 
 typedef enum {
   T_NUMBER,
-  T_STRING
+  T_STRING,
+  T_NIL,
+  T_VOID,
+  T_TRUE,
+  T_FALSE,
+  T_EOF
 } object_type;
 
 struct any_object {
@@ -40,5 +45,14 @@ typedef struct object {
 
 object* alloc_number(int64_t value);
 object* alloc_string(char *value);
+
+//
+// Well-known objects
+
+object* nil_object;
+object* void_object;
+object* true_object;
+object* false_object;
+object* eof_object;
 
 #endif
