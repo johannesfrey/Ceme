@@ -39,6 +39,12 @@ typedef struct object {
   } u;
 } object;
 
+//
+// Functions
+//
+
+void init_wellknown_objects();
+
 // 
 // Allocator functions
 //
