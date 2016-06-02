@@ -65,6 +65,19 @@ int test_reader()
   check(obj->u.any.type == T_STRING, "Not of type T_STRING");
   check((strcmp(obj->u.string.value, "abc\nd") == 0), "Bad value for String");
   
+  // Check for well-known symbols (T_NIL, T_TRUE, T_FALSE)
+  check(input = write_to_testfile("#t"), "write_to_testfile failed");
+  obj = read_object(input);
+  check((obj->u.any.type == T_TRUE && obj == true_object), "Not of type T_TRUE");
+  
+  check(input = write_to_testfile("#f"), "write_to_testfile failed");
+  obj = read_object(input);
+  check((obj->u.any.type == T_FALSE && obj == false_object), "Not of type T_FALSE");
+  
+  check(input = write_to_testfile("nil"), "write_to_testfile failed");
+  obj = read_object(input);
+  check((obj->u.any.type == T_NIL && obj == nil_object), "Not of type T_NIL");
+
   fclose(input);
 
   return 0;
@@ -76,6 +89,7 @@ error:
 
 int main()
 {
+  init_wellknown_objects();
   check(test_reader() == 0, "test_reader failed");
 
   return 0;
