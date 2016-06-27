@@ -4,6 +4,8 @@ scheme
 tests/reader_test
 tests/reader_test_file
 
+.arcconfig
+
 ### OSX ###
 .DS_Store
 .AppleDouble
