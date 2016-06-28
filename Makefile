@@ -1,27 +1,37 @@
-CC	= clang
-CFLAGS	= -Wall -std=gnu99 -g
-OBJS	= memory.o reader.o eval.o printer.o symbol_table.o
+CC			= clang
+CFLAGS			= -Wall -std=gnu99
+DEBUG_BUILD		= -g
+THIRD_PARTY_DIR		= ./third_party
+THIRD_PARTY_SRCS	:= $(wildcard $(THIRD_PARTY_DIR)/*.c)
+OBJS			= memory.o reader.o eval.o printer.o symbol_table.o
+
+.PHONY: all ndebug run clean
+
+all: scheme
+
+ndebug: DEBUG_BUILD = -DNDEBUG
+ndebug: scheme
+
+scheme: scheme.c $(THIRD_PARTY_SRCS) $(OBJS)
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) scheme.c $(THIRD_PARTY_SRCS) $(OBJS) -o scheme
+
+memory.o: memory.h memory.c
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c memory.c
+
+reader.o: reader.h reader.c memory.o symbol_table.o
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c reader.c
+
+eval.o: eval.h eval.c memory.o
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c eval.c
+
+printer.o: printer.h printer.c memory.o
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c printer.c
+
+symbol_table.o: symbol_table.h symbol_table.c memory.o
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c symbol_table.c
 
 run: tests/*.c scheme
 	cd tests; make tests
-
-scheme: scheme.c ./third_party/*.c $(OBJS)
-	$(CC) $(CFLAGS) scheme.c ./third_party/*.c $(OBJS) -o scheme
-
-memory.o: memory.h memory.c
-	$(CC) $(CFLAGS) -c memory.c
-
-reader.o: reader.h reader.c memory.o
-	$(CC) $(CFLAGS) -c reader.c
-
-eval.o: eval.h eval.c memory.o
-	$(CC) $(CFLAGS) -c eval.c
-
-printer.o: printer.h printer.c memory.o
-	$(CC) $(CFLAGS) -c printer.c
-
-symbol_table.o: symbol_table.h symbol_table.c 
-	$(CC) $(CFLAGS) -c symbol_table.c 
 
 clean:
 	rm -rf $(OBJS) scheme *.dSYM
