@@ -4,8 +4,10 @@
 
 #include "dbg.h"
 #include "reader.h"
+#include "symbol_table.h"
 
-void skip_whitespace(FILE *in_stream)
+void 
+skip_whitespace(FILE *in_stream)
 {
     int ch;
 
@@ -18,7 +20,8 @@ void skip_whitespace(FILE *in_stream)
     }
 }
 
-object* read_number(FILE *in_stream, int first)
+object_p
+read_number(FILE *in_stream, int first)
 {
     int ch;
     int val = 0;
@@ -34,7 +37,8 @@ object* read_number(FILE *in_stream, int first)
     return alloc_number(val);
 }
 
-object* read_string(FILE *in_stream)
+object_p
+read_string(FILE *in_stream)
 {
     int ch;
     char *chars = NULL;
@@ -83,7 +87,8 @@ object* read_string(FILE *in_stream)
     return alloc_string(chars);
 }
 
-object* read_symbol(FILE *in_stream)
+object_p 
+read_symbol(FILE *in_stream)
 {
     int ch;
     char *chars = NULL;
@@ -105,24 +110,34 @@ object* read_symbol(FILE *in_stream)
         ch = getc(in_stream);
     }
     // Trim to actual size and force append NUL character
-    chars = realloc(chars, current_used_size+1);
     chars[current_used_size] = '\0';
+    ungetc(ch, in_stream);
 
     if (strcmp(chars, "nil") == 0) {
+        free(chars);
         return nil_object;
     }
-    if (strcmp(chars, "#t") == 0) {
-        return true_object;
-    }
-    if (strcmp(chars, "#f") == 0) {
-        return false_object;
+    if (chars[0] == '#') {
+        if (strcmp(chars, "#t") == 0) {
+            free(chars);
+            return true_object;
+        }
+        if (strcmp(chars, "#f") == 0) {
+            free(chars);
+            return false_object;
+        }
     }
 
-    return alloc_string(chars);
+    chars = realloc(chars, current_used_size+1);
+    chars[current_used_size] = '\0';
+    // Do not free chars here, as alloc_symbol does not
+    // alloc the string value by itself
+
+    return symbol_table_get_or_set(chars);
 }
 
-
-object* read_object(FILE *in_stream)
+object_p 
+read_object(FILE *in_stream)
 {
     int ch;
 

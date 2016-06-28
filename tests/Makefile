@@ -5,9 +5,9 @@ TEST_PROGS 	= reader_test symbol_table_test
 tests: $(TEST_PROGS)
 	$(foreach prog,$(TEST_PROGS),./$(prog);)
 
-reader_test: reader_test.c ../reader.h ../reader.c ../dbg.h
+reader_test: reader_test.c ../reader.h ../reader.c ../third_party/superfasthash.c ../dbg.h
 	cd ..; make reader.o
-	$(CC) $(CFLAGS) reader_test.c ../reader.o ../memory.o -o reader_test
+	$(CC) $(CFLAGS) reader_test.c ../third_party/superfasthash.c ../reader.o ../memory.o ../symbol_table.o -o reader_test
 
 symbol_table_test: symbol_table_test.c ../symbol_table.h ../symbol_table.c ../third_party/superfasthash.c ../dbg.h
 	cd ..; make symbol_table.o

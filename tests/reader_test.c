@@ -6,6 +6,7 @@
 #include "../dbg.h"
 #include "../reader.h"
 #include "../memory.h"
+#include "../symbol_table.h"
 
 static char *test_file_name = "reader_test_file";
 
@@ -78,6 +79,12 @@ int test_reader()
     obj = read_object(input);
     check((obj->any.tag == T_NIL && obj == nil_object), "Not of type T_NIL");
 
+    // Check for custom symbols
+    check(input = write_to_testfile("mysymbol"), "write_to_testfile failed");
+    obj = read_object(input);
+    check(obj->any.tag == T_SYMBOL, "Not of type T_SYMBOL");
+    check((strcmp(obj->symbol.value, "mysymbol") == 0), "Bad value for String");
+
     fclose(input);
 
     return 0;
@@ -90,6 +97,7 @@ error:
 int main()
 {
     init_wellknown_objects();
+    init_symbol_table();
     check(test_reader() == 0, "test_reader failed");
 
     return 0;
