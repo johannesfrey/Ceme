@@ -10,6 +10,7 @@
 int 
 main()
 {
+    init_symbol_table();
     init_wellknown_objects();
 
     printf("Welcome to Scheme.\n");

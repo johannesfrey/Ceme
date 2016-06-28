@@ -70,3 +70,12 @@ alloc_cons(object_p car, object_p cdr)
         return (object_p)cons_obj;
     }
 }
+
+object_p*
+alloc_symbol_table(int size)
+{
+    object_p *symbol_table;
+
+    symbol_table = (object_p *)(malloc(sizeof(object_p) * size));
+    return symbol_table;
+}

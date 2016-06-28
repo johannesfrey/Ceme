@@ -68,6 +68,7 @@ object_p alloc_number(int64_t value);
 object_p alloc_string(char *value);
 object_p alloc_symbol(char *value);
 object_p alloc_cons(object_p car, object_p cdr);
+object_p* alloc_symbol_table(int size);
 
 //
 // Well-known objects

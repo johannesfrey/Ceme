@@ -32,7 +32,7 @@ rehash_symbol_table()
     object_p *old_table = symbol_table;
     object_p *new_table;
 
-    new_table = (object_p *)(malloc(sizeof(object_p) * new_size));
+    new_table = alloc_symbol_table(new_size);
     memset((void *)new_table, 0, (sizeof(object_p) * new_size));
 
     for (idx_old_table = 0; idx_old_table < old_size; idx_old_table++) {
@@ -117,8 +117,7 @@ void
 init_symbol_table()
 {
     debug("Initializing symbol table");
-
     symbol_table_size = SYMBOL_TABLE_INITIAL_SIZE;
-    symbol_table = (object_p *)(malloc(sizeof(object_p) * symbol_table_size));
+    symbol_table = alloc_symbol_table(symbol_table_size);
     memset((void *)symbol_table, 0, (sizeof(object_p) * symbol_table_size));
 }
