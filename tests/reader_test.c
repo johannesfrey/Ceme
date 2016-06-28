@@ -10,7 +10,8 @@
 
 static char *test_file_name = "reader_test_file";
 
-FILE* write_to_testfile(const char *string)
+FILE* 
+write_to_testfile(const char *string)
 {
     FILE *test_file = NULL;
 
@@ -29,7 +30,8 @@ error:
     return NULL;
 }
 
-int test_reader()
+int 
+test_reader()
 {
     FILE *input = NULL;
     object *obj = NULL;
@@ -94,7 +96,8 @@ error:
     return -1;
 }
 
-int main()
+int 
+main()
 {
     init_wellknown_objects();
     init_symbol_table();

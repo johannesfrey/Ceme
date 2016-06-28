@@ -7,7 +7,8 @@
 #include "printer.h"
 #include "symbol_table.h"
 
-int main()
+int 
+main()
 {
     init_wellknown_objects();
 

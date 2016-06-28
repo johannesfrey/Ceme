@@ -6,7 +6,8 @@
 #include "../memory.h"
 #include "../symbol_table.h"
 
-int test_symbol_table()
+int 
+test_symbol_table()
 {
     object_p s1, s2, s3;
 
@@ -52,7 +53,8 @@ error:
     return -1;
 }
 
-int main()
+int 
+main()
 {
     init_symbol_table();
     check(test_symbol_table() == 0, "test_symbol_table failed\n");

@@ -3,7 +3,8 @@
 
 #include "memory.h"
 
-void print(object *obj)
+void 
+print(object *obj)
 {
     switch (obj->any.tag) {
         case T_NUMBER:
