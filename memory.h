@@ -37,13 +37,11 @@ struct symbol_object {
     char *value;
 };
 
-typedef struct object {
-    union {
-        struct any_object any;
-        struct number_object number;
-        struct string_object string;
-        struct symbol_object symbol;
-    } u;
+typedef union object {
+    struct any_object any;
+    struct number_object number;
+    struct string_object string;
+    struct symbol_object symbol;
 } object, *object_p;
 
 //

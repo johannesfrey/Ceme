@@ -11,16 +11,16 @@ int test_symbol_table()
     object_p s1, s2, s3;
 
     s1 = symbol_table_get_or_set("alpha");
-    check(s1->u.any.tag == T_SYMBOL, "Wrong tag for symbol");
-    check((strcmp(s1->u.symbol.value, "alpha") == 0), "Wrong value in symbol");
+    check(s1->any.tag == T_SYMBOL, "Wrong tag for symbol");
+    check((strcmp(s1->symbol.value, "alpha") == 0), "Wrong value in symbol");
     
     s2 = symbol_table_get_or_set("beta");
-    check(s1->u.any.tag == T_SYMBOL, "Wrong tag for symbol");
-    check((strcmp(s2->u.symbol.value, "beta") == 0), "Wrong value in symbol");
+    check(s1->any.tag == T_SYMBOL, "Wrong tag for symbol");
+    check((strcmp(s2->symbol.value, "beta") == 0), "Wrong value in symbol");
 
     s3 = symbol_table_get_or_set("alpha");
-    check(s1->u.any.tag == T_SYMBOL, "Wrong tag for symbol");
-    check((strcmp(s3->u.symbol.value, "alpha") == 0), "Wrong value in symbol");
+    check(s1->any.tag == T_SYMBOL, "Wrong tag for symbol");
+    check((strcmp(s3->symbol.value, "alpha") == 0), "Wrong value in symbol");
 
     check(s1 == s3, "Not retrieving the right symbol from symbol table");
     check(s1 != s2, "Not distinct symbols even though they should");

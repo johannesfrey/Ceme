@@ -4,20 +4,20 @@
 
 void init_wellknown_objects()
 {
-    nil_object = (struct object *)(malloc(sizeof(struct any_object)));
-    nil_object->u.any.tag = T_NIL;
+    nil_object = (object_p)(malloc(sizeof(struct any_object)));
+    nil_object->any.tag = T_NIL;
 
-    void_object = (struct object *)(malloc(sizeof(struct any_object)));
-    void_object->u.any.tag = T_VOID;
+    void_object = (object_p)(malloc(sizeof(struct any_object)));
+    void_object->any.tag = T_VOID;
 
-    true_object = (struct object *)(malloc(sizeof(struct any_object)));
-    true_object->u.any.tag = T_TRUE;
+    true_object = (object_p)(malloc(sizeof(struct any_object)));
+    true_object->any.tag = T_TRUE;
 
-    false_object = (struct object *)(malloc(sizeof(struct any_object)));
-    false_object->u.any.tag = T_FALSE;
+    false_object = (object_p)(malloc(sizeof(struct any_object)));
+    false_object->any.tag = T_FALSE;
 
-    eof_object = (struct object *)(malloc(sizeof(struct any_object)));
-    eof_object->u.any.tag = T_EOF;
+    eof_object = (object_p)(malloc(sizeof(struct any_object)));
+    eof_object->any.tag = T_EOF;
 }
 
 object_p alloc_number(int64_t value)

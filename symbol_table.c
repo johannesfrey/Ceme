@@ -40,7 +40,7 @@ rehash_symbol_table()
 
         // hash object for new table and try to insert into next free slot
         if (old_symbol != NULL) {
-            uint32_t new_hash = hash(old_symbol->u.symbol.value);
+            uint32_t new_hash = hash(old_symbol->symbol.value);
             int start_idx = new_hash % new_size;
             int next_idx = start_idx;
             object_p peek;
@@ -99,7 +99,7 @@ symbol_table_get_or_set(char *key)
         }
         
         // GET part of function 
-        if (strcmp(key, peek->u.symbol.value) == 0) {
+        if (strcmp(key, peek->symbol.value) == 0) {
             debug("Symbol '%s' retrieved\n", key);
             return peek;
         }

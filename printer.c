@@ -5,12 +5,12 @@
 
 void print(object *obj)
 {
-    switch (obj->u.any.tag) {
+    switch (obj->any.tag) {
         case T_NUMBER:
-            printf("%lld", obj->u.number.value);
+            printf("%lld", obj->number.value);
             break;
         case T_STRING:
-            printf("\"%s\"", obj->u.string.value);
+            printf("\"%s\"", obj->string.value);
             break;
         case T_NIL:
             printf("nil");
