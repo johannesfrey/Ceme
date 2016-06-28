@@ -13,6 +13,9 @@ print(object *obj)
         case T_STRING:
             printf("\"%s\"", obj->string.value);
             break;
+        case T_SYMBOL:
+            printf("%s", obj->symbol.value);
+            break;
         case T_NIL:
             printf("nil");
             break;
