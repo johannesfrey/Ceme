@@ -11,12 +11,15 @@ typedef enum {
     T_NUMBER,
     T_STRING,
     T_SYMBOL,
+    T_CONS,
     T_NIL,
     T_VOID,
     T_TRUE,
     T_FALSE,
     T_EOF
 } object_tag;
+
+typedef union object *object_p;
 
 struct any_object {
     object_tag tag;
@@ -37,12 +40,19 @@ struct symbol_object {
     char *value;
 };
 
+struct cons_object {
+    object_tag tag;
+    object_p car;
+    object_p cdr;
+};
+
 typedef union object {
     struct any_object any;
     struct number_object number;
     struct string_object string;
     struct symbol_object symbol;
-} object, *object_p;
+    struct cons_object cons;
+} object;
 
 //
 // Functions
@@ -57,6 +67,7 @@ void init_wellknown_objects();
 object_p alloc_number(int64_t value);
 object_p alloc_string(char *value);
 object_p alloc_symbol(char *value);
+object_p alloc_cons(object_p car, object_p cdr);
 
 //
 // Well-known objects
