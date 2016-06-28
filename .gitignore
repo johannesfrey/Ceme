@@ -1,7 +1,7 @@
 # Created by https://www.gitignore.io/api/osx,c,vim
 
 scheme
-tests/reader_test
+tests/*_test
 tests/reader_test_file
 
 .arcconfig
