@@ -12,6 +12,8 @@ typedef enum {
     T_STRING,
     T_SYMBOL,
     T_CONS,
+    T_GLOBALENV,
+    T_LOCALENV,
     T_NIL,
     T_VOID,
     T_TRUE,
@@ -46,12 +48,23 @@ struct cons_object {
     object_p cdr;
 };
 
+#define env_binding_object cons_object
+typedef struct env_binding_object ENV_BINDING;
+
+struct env_object {
+    object_tag tag;
+    int length;
+    object_p parent;
+    ENV_BINDING bindings[];
+}
+
 typedef union object {
     struct any_object any;
     struct number_object number;
     struct string_object string;
     struct symbol_object symbol;
     struct cons_object cons;
+    struct env_object env;
 } object;
 
 //
@@ -72,6 +85,7 @@ object_p* alloc_symbol_table(int size);
 
 //
 // Well-known objects
+//
 
 object_p nil_object;
 object_p void_object;
