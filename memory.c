@@ -91,23 +91,28 @@ object_p
 alloc_env(int length, object_p parent)
 {
     // slots above bindings slot in env_object + the number of bindings
-    int alloc_size = offsetof(struct env_object, bindings) + sizeof(ENV_BINDING)*length;
+    int alloc_size = offsetof(struct env_object, bindings) + sizeof(env_binding_t)*length;
 
     check((parent == NULL ||
             (parent->any.tag == T_LOCALENV ||
              parent->any.tag == T_GLOBALENV)), "Invalid parent environment given!");
 
     object_p new_env = (object_p)(malloc(alloc_size));
+
     new_env->env.tag = T_LOCALENV;
     new_env->env.parent = parent;
     new_env->env.length = length;
 
     for (int i = 0; i < length; i++) {
+        new_env->env.bindings[i].tag = T_ENV_BINDING;
         new_env->env.bindings[i].car = nil_object;
         new_env->env.bindings[i].cdr = nil_object;
     }
 
     return new_env;
+
+error:
+    abort();
 }
 
 object_p

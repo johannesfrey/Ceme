@@ -49,14 +49,15 @@ struct cons_object {
 };
 
 #define env_binding_object cons_object
-typedef struct env_binding_object ENV_BINDING;
+#define T_ENV_BINDING T_CONS
+typedef struct env_binding_object env_binding_t;
 
 struct env_object {
     object_tag tag;
     int length;
     object_p parent;
-    ENV_BINDING bindings[];
-}
+    env_binding_t bindings[];
+};
 
 typedef union object {
     struct any_object any;
@@ -82,6 +83,16 @@ object_p alloc_string(char *value);
 object_p alloc_symbol(char *value);
 object_p alloc_cons(object_p car, object_p cdr);
 object_p* alloc_symbol_table(int size);
+object_p alloc_global_env(int length);
+object_p alloc_env(int length, object_p parent);
+object_p alloc_global_env(int length);
+
+//
+// Globally visible global environment
+// (initialized via init_global_env() in environment.c)
+//
+
+extern object_p global_env;
 
 //
 // Well-known objects
