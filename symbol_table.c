@@ -23,8 +23,9 @@ hash(const char *chars)
 }
 
 internal void
-rehash_symbol_table()
+symbol_table_rehash()
 {
+    debug("Rehash symbol table");
     int old_size = symbol_table_size;
     int new_size = (old_size + 1) * 2 - 1;
     int idx_old_table;
@@ -72,7 +73,7 @@ error:
 }
 
 object_p
-symbol_table_get_or_set(char *key)
+symbol_table_get_or_put(char *key)
 {
     uint32_t hash_key = hash(key);
     int start_idx = hash_key % symbol_table_size;
@@ -88,11 +89,11 @@ symbol_table_get_or_set(char *key)
         if (peek == NULL) {
             object_p new_sym = alloc_symbol(key);
             symbol_table[next_idx] = new_sym;
-            debug("Symbol '%s' added\n", key);
+            debug("Symbol '%s' added", key);
             fill_level++;
 
             if (fill_level > (symbol_table_size * 3 / 4)) {
-                rehash_symbol_table();
+                symbol_table_rehash();
             }
 
             return new_sym;
@@ -100,7 +101,7 @@ symbol_table_get_or_set(char *key)
         
         // GET part of function 
         if (strcmp(key, peek->symbol.value) == 0) {
-            debug("Symbol '%s' retrieved\n", key);
+            debug("Symbol '%s' retrieved", key);
             return peek;
         }
 

@@ -133,7 +133,7 @@ read_symbol(FILE *in_stream)
     // Do not free chars here, as alloc_symbol does not
     // alloc the string value by itself
 
-    return symbol_table_get_or_set(chars);
+    return symbol_table_get_or_put(chars);
 }
 
 object_p 
