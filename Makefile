@@ -1,8 +1,6 @@
 CC			= clang
 CFLAGS			= -Wall -std=gnu99
 DEBUG_BUILD		= -g
-THIRD_PARTY_DIR		= ./third_party
-THIRD_PARTY_SRCS	:= $(wildcard $(THIRD_PARTY_DIR)/*.c)
 OBJS			= memory.o reader.o eval.o printer.o symbol_table.o environment.o
 
 .PHONY: all ndebug run clean
@@ -12,8 +10,8 @@ all: scheme
 ndebug: DEBUG_BUILD = -DNDEBUG
 ndebug: scheme
 
-scheme: scheme.c $(THIRD_PARTY_SRCS) $(OBJS)
-	$(CC) $(CFLAGS) $(DEBUG_BUILD) scheme.c $(THIRD_PARTY_SRCS) $(OBJS) -o scheme
+scheme: scheme.c $(OBJS)
+	$(CC) $(CFLAGS) $(DEBUG_BUILD) scheme.c $(OBJS) -o scheme
 
 memory.o: memory.h memory.c
 	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c memory.c

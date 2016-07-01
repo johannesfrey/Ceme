@@ -10,7 +10,6 @@
 #define internal static
 
 const int SYMBOL_TABLE_INITIAL_SIZE = 511;
-uint32_t SuperFastHash(const char *data, int len);
 
 static object_p *symbol_table;
 static int symbol_table_size = SYMBOL_TABLE_INITIAL_SIZE;
@@ -19,7 +18,14 @@ static int fill_level = 0;
 internal uint32_t 
 hash(const char *chars)
 {
-    return SuperFastHash(chars, sizeof(chars)); 
+    // use djb2 hash function
+    uint32_t hash = 5381;
+    int c;
+
+    while ((c = *chars++))
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
 }
 
 internal void
