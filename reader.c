@@ -136,6 +136,43 @@ read_symbol(FILE *in_stream)
     return symbol_table_get_or_put(chars);
 }
 
+object_p
+read_list(FILE *input)
+{
+    int ch;
+    // Every list corresponds to a cons; init with nil for car and cdr
+    object_p start_list = alloc_cons(nil_object, nil_object);
+    object_p current = start_list;
+    skip_whitespace(input);
+
+    ch = getc(input);
+    if (ch == ')')
+        return nil_object;
+    ungetc(ch, input);
+
+    for (;;) {
+        current->cons.car = read_object(input);
+        skip_whitespace(input);
+
+        ch = getc(input);
+        if (ch == ')') {
+            current->cons.cdr = nil_object;
+            break;
+        }
+        if (ch == EOF) {
+            return nil_object;
+        }
+        ungetc(ch, input);
+
+        // Guarantee that the cdr of the current list is also a cons
+        // and set it as the current one for the next loop iteration.
+        current->cons.cdr = alloc_cons(nil_object, nil_object);
+        current = current->cons.cdr;
+    }
+
+    return start_list;
+}
+
 object_p 
 read_object(FILE *in_stream)
 {
@@ -147,6 +184,9 @@ read_object(FILE *in_stream)
 
     if (isdigit(ch)) {
         return read_number(in_stream, ch);
+    }
+    if (ch == '(') {
+        return read_list(in_stream);
     }
     if (ch == '"') {
         return read_string(in_stream);
