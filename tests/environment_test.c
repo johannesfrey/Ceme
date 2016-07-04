@@ -7,7 +7,7 @@ int
 test_environment()
 {
     object_p val_obtained;
-    object_p val_foo_number, val_bar_number, val_string;
+    object_p val_foo_number, val_foo_number2, val_bar_number, val_string;
     object_p entry_obtained;
     object_p local_env;
 
@@ -23,7 +23,11 @@ test_environment()
     val_foo_number = alloc_number(0xF000);
     global_env_store(CREATE, key_foo, val_foo_number);
     val_obtained = global_env_get(VALUE, key_foo);
-    check(val_obtained == val_foo_number, "Error in global env lookup");
+    check(val_obtained == val_foo_number, "Error in global env lookup (CREATE)");
+    val_foo_number2 = alloc_number(0x000F);
+    global_env_store(MODIFY, key_foo, val_foo_number2);
+    val_obtained = global_env_get(VALUE, key_foo);
+    check(val_obtained == val_foo_number2, "Error in global env lookup (MODIFY)");
     
     val_string = alloc_string("BAR");
     global_env_store(CREATE, key_bar, val_string);
