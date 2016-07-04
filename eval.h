@@ -3,6 +3,6 @@
 
 #include "memory.h"
 
-object* eval(object *expr);
+object_p eval(object_p env, object_p expr);
 
 #endif
