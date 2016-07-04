@@ -87,6 +87,29 @@ test_reader()
     check(obj->any.tag == T_SYMBOL, "Not of type T_SYMBOL");
     check((strcmp(obj->symbol.value, "mysymbol") == 0), "Bad value for String");
 
+    // Check for lists (T_CONS)
+    check(input = write_to_testfile("()"), "write_to_testfile failed");
+    obj = read_object(input);
+    check(TAG(obj) == T_NIL, "Empty list should return nil");
+
+    check(input = write_to_testfile("(()())"), "write_to_testfile failed");
+    obj = read_object(input);
+    check(IS_CONS(obj) && IS_NIL(CAR(obj)) && IS_CONS(CDR(obj)) 
+            && IS_NIL(CAR(CDR(obj))) && IS_NIL(CDR(CDR(obj))), "Problems reading two empty lists inside list");
+
+    check(input = write_to_testfile("(1)"), "write_to_testfile failed");
+    obj = read_object(input);
+    check(IS_CONS(obj) && IS_NUMBER(CAR(obj)) && NUMBER_VAL(CAR(obj)) == 1
+            && IS_NIL(CDR(obj)), "Problems reading list with single number entry");
+
+    check(input = write_to_testfile("(1 2)"), "write_to_testfile failed");
+    obj = read_object(input);
+    check(IS_CONS(obj) && IS_NUMBER(CAR(obj)) && NUMBER_VAL(CAR(obj)) == 1, "Problems reading first number element in list with two number elements");
+    obj = CDR(obj);
+    check(IS_CONS(obj) && IS_NUMBER(CAR(obj)) && NUMBER_VAL(CAR(obj)) == 2, "Problems reading first number element in list with two number elements");
+    obj = CDR(obj);
+    check(IS_NIL(obj), "Problems reading nil terminator element in list with two number elements");
+
     fclose(input);
 
     return 0;
