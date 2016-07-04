@@ -69,6 +69,27 @@ typedef union object {
 } object;
 
 //
+// Convenient Macros
+//
+
+#define TAG(o)          ((o)->any.tag)
+#define CAR(o)          ((o)->cons.car)
+#define CDR(o)          ((o)->cons.cdr)
+#define NUMBER_VAL(o)   ((o)->number.value)
+#define STRING_VAL(o)   ((o)->string.value)
+#define SYMBOL_VAL(o)   ((o)->symbol.value)
+
+#define IS_CONS(o)      (TAG(o) == T_CONS)
+#define IS_NUMBER(o)    (TAG(o) == T_NUMBER)
+#define IS_STRING(o)    (TAG(o) == T_STRING)
+#define IS_SYMBOL(o)    (TAG(o) == T_SYMBOL)
+#define IS_VOID(o)      (TAG(o) == T_VOID)
+#define IS_NIL(o)       (TAG(o) == T_NIL)
+#define IS_ENV(o)       (IS_GLOBALENV(o) || IS_LOCALENV(o))
+#define IS_GLOBALENV(o) (TAG(o) == T_GLOBALENV)
+#define IS_LOCALENV(o)  (TAG(o) == T_LOCALENV)
+
+//
 // Functions
 //
 
