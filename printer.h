@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void print(object *obj);
+void scm_print_object(output_t *output, object_p obj);
 
 #endif
