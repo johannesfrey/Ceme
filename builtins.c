@@ -130,6 +130,26 @@ error:
     longjmp(error_occured, 1);
 }
 
+cont_p
+builtin_eq(cont_p cont)
+{
+    object_p arg_list, first_arg, second_arg, ret_val;
+
+    arg_list = cont->args_locals[0];
+    first_arg = CAR(arg_list);
+    second_arg = CAR(CDR(arg_list));
+    ret_val = false_object;
+
+    if (first_arg == second_arg) ret_val = true_object;
+
+    if (IS_NUMBER(first_arg))
+        if (IS_NUMBER(second_arg))
+            if (NUMBER_VAL(first_arg) == NUMBER_VAL(second_arg))
+                ret_val = true_object;
+
+    CP_RETURN(cont, ret_val);
+}
+
 cont_p builtin_if2(cont_p cont);
 
 cont_p

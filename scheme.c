@@ -145,6 +145,8 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("cons"), alloc_builtin_func("cons", builtin_cons, 2));
     global_env_put(symbol_table_get_or_put("car"), alloc_builtin_func("car", builtin_car, 1));
     global_env_put(symbol_table_get_or_put("cdr"), alloc_builtin_func("cdr", builtin_cdr, 1));
+    global_env_put(symbol_table_get_or_put("eq?"), alloc_builtin_func("eq?", builtin_eq, 2));
+
     global_env_put(symbol_table_get_or_put("if"), alloc_builtin_syntax("if", builtin_if, 3));
     global_env_put(symbol_table_get_or_put("define"), alloc_builtin_syntax("define", builtin_define, -1));
     global_env_put(symbol_table_get_or_put("lambda"), alloc_builtin_syntax("lambda", builtin_lambda, -1));
