@@ -200,50 +200,6 @@ error:
     longjmp(error_occured, 1);
 }
 
-cont_p builtin_if2(cont_p cont);
-
-cont_p
-builtin_if(cont_p cont)
-{
-    #define env                 cont->args_locals[0]
-    #define arg_list            cont->args_locals[1]
-    #define if_expr             cont->args_locals[2]
-    #define else_expr           cont->args_locals[3]
-
-    object_p rest_list;
-    object_p cond_expr;
-
-    cond_expr = CAR(arg_list);
-    rest_list = CDR(arg_list);
-
-    if_expr = CAR(rest_list);
-    rest_list = CDR(rest_list);
-
-    else_expr = CAR(rest_list);
-
-    CP_CALL2(cont, scm_eval, env, cond_expr, builtin_if2);
-}
-
-cont_p
-builtin_if2(cont_p cont)
-{
-    object_p evaled_cond = cont->ret_val;
-
-    object_p expr_to_eval;
-
-    if (evaled_cond == false_object)
-        expr_to_eval = else_expr;
-    else
-        expr_to_eval = if_expr;
-
-    CP_TAILCALL2(cont, scm_eval, env, expr_to_eval);
-
-    #undef else_expr
-    #undef if_expr
-    #undef arg_list
-    #undef env
-}
-
 cont_p
 builtin_lambda(cont_p cont)
 {
@@ -353,6 +309,51 @@ builtin_define2(cont_p cont)
     #undef arg_list
     #undef env
 }
+
+cont_p builtin_if2(cont_p cont);
+
+cont_p
+builtin_if(cont_p cont)
+{
+    #define env                 cont->args_locals[0]
+    #define arg_list            cont->args_locals[1]
+    #define if_expr             cont->args_locals[2]
+    #define else_expr           cont->args_locals[3]
+
+    object_p rest_list;
+    object_p cond_expr;
+
+    cond_expr = CAR(arg_list);
+    rest_list = CDR(arg_list);
+
+    if_expr = CAR(rest_list);
+    rest_list = CDR(rest_list);
+
+    else_expr = CAR(rest_list);
+
+    CP_CALL2(cont, scm_eval, env, cond_expr, builtin_if2);
+}
+
+cont_p
+builtin_if2(cont_p cont)
+{
+    object_p evaled_cond = cont->ret_val;
+
+    object_p expr_to_eval;
+
+    if (evaled_cond == false_object)
+        expr_to_eval = else_expr;
+    else
+        expr_to_eval = if_expr;
+
+    CP_TAILCALL2(cont, scm_eval, env, expr_to_eval);
+
+    #undef else_expr
+    #undef if_expr
+    #undef arg_list
+    #undef env
+}
+
 
 internal int
 is_define(object_p expr)
