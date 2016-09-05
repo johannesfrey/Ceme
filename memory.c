@@ -35,6 +35,7 @@ init_wellknown_objects()
     eof_object->any.tag = T_EOF;
 
     define_symbol = symbol_table_get_or_put("define");
+    quote_symbol = symbol_table_get_or_put("quote");
 }
 
 object_p 
