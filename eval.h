@@ -3,6 +3,6 @@
 
 #include "memory.h"
 
-object_p eval(object_p env, object_p expr);
+cont_p scm_eval(cont_p cont);
 
 #endif
