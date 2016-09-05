@@ -3,6 +3,18 @@
 
 #include "dbg.h"
 #include "memory.h"
+#include "symbol_table.h"
+
+#define internal static
+
+object_p
+alloc_object(object_tag tag, size_t size)
+{
+    object_p ptr = malloc(size);
+    ptr->any.tag = tag;
+
+    return ptr;
+}
 
 void 
 init_wellknown_objects()
@@ -21,6 +33,8 @@ init_wellknown_objects()
 
     eof_object = (object_p)(malloc(sizeof(struct any_object)));
     eof_object->any.tag = T_EOF;
+
+    define_symbol = symbol_table_get_or_put("define");
 }
 
 object_p 
@@ -35,7 +49,7 @@ alloc_number(int64_t value)
 }
 
 object_p 
-alloc_string(char *value)
+alloc_string(bstring value)
 {
     struct string_object *str_obj;
     str_obj = (struct string_object *)(malloc(sizeof(struct string_object)));
@@ -75,6 +89,153 @@ alloc_cons(object_p car, object_p cdr)
 
         return (object_p)cons_obj;
     }
+}
+
+object_p
+alloc_vector(int length)
+{
+    struct vector_object *vector;
+    int i;
+
+    vector = (struct vector_object *)(malloc(sizeof(struct vector_object)
+                + sizeof(object_p) * (length - NUM_DUMMY_ALLOC)));
+    vector->tag = T_VECTOR;
+    vector->length = length;
+
+    for (i = 0; i < length; i++) {
+        vector->elements[i] = nil_object;
+    }
+
+    return (object_p)vector;
+}
+
+internal object_p
+alloc_builtin_object(object_tag tag, char *name, cont_func_t func, int num_params)
+{
+    struct builtin_object *b_obj;
+    b_obj = malloc(sizeof(struct builtin_object));
+
+    b_obj->tag = tag;
+    b_obj->name = symbol_table_get_or_put(name);
+    b_obj->func = func;
+    b_obj->num_params = num_params;
+
+    return (object_p)b_obj;
+}
+
+object_p
+alloc_builtin_func(char *name, cont_func_t func, int num_params)
+{
+    object_p builtin_f = alloc_builtin_object(T_BUILTIN_FUNC,\
+                                            name, func, num_params);
+
+    return builtin_f;
+}
+
+object_p
+alloc_builtin_syntax(char *name, cont_func_t func, int num_params)
+{
+    object_p builtin_s = alloc_builtin_object(T_BUILTIN_SYNTAX,\
+                                            name, func, num_params);
+
+    return builtin_s;
+}
+
+internal object_p
+alloc_userdefined_object(object_tag tag, char *name,\
+        object_p param_list, object_p body_list,\
+        object_p env)
+{
+    struct userdefined_object *ud_obj;
+    ud_obj = malloc(sizeof(struct userdefined_object));
+
+    ud_obj->tag = tag;
+    ud_obj->name = symbol_table_get_or_put(name);
+    ud_obj->param_list = param_list;
+    ud_obj->body_list = body_list;
+    ud_obj->num_params = 0;
+    ud_obj->num_locals = 0;
+    ud_obj->home_env = env;
+
+    return (object_p)ud_obj;
+}
+
+object_p
+alloc_userdefined_func(char *name, object_p param_list,\
+        object_p body_list, object_p env)
+{
+    object_p udf = alloc_userdefined_object(T_USERDEFINED_FUNC,
+            name, param_list, body_list, env);
+
+    return udf;
+}
+
+object_p
+alloc_userdefined_syntax(char *name, object_p param_list,\
+        object_p body_list, object_p env)
+{
+    object_p uds = alloc_userdefined_object(T_USERDEFINED_SYNTAX,
+            name, param_list, body_list, env);
+
+    return uds;
+}
+
+object_p
+alloc_scanner(FILE *file)
+{
+    scanner_t *scanner;
+
+    scanner = (scanner_t *)(malloc(sizeof(scanner_t)));
+    scanner->tag = T_SCANNER;
+    scanner->file = file;
+    scanner->input = bfromcstr("");
+    scanner->scan_pos = 0;
+    scanner->expr_start = 0;
+    scanner->expr_end = 0;
+    scanner->eof = 0;
+    scanner->nparens_expected = 0;
+    scanner->str_pending = 0;
+    scanner->pending = 0;
+
+    return (object_p)scanner;
+}
+
+object_p
+alloc_output_stream(FILE *stream)
+{
+    object_p out_obj = alloc_object(T_OUTPUT,\
+            sizeof(struct output_object));
+
+    out_obj->output.stream = stream;
+    out_obj->output.str_buf = NULL;
+
+    return out_obj;
+}
+
+object_p
+alloc_output_strbuf()
+{
+    object_p out_obj = alloc_object(T_OUTPUT,\
+            sizeof(struct output_object));
+
+    out_obj->output.stream = NULL;
+    out_obj->output.str_buf = bfromcstr("");
+
+    return out_obj;
+}
+
+cont_p
+alloc_continuation()
+{
+    cont_p continuation;
+
+    continuation = (cont_p)(malloc(sizeof(struct continuation_object)));
+    continuation->tag = T_CONTINUATION;
+    continuation->caller = NULL;
+    continuation->next = NULL;
+    continuation->ret_val = NULL;
+
+    return continuation;
 }
 
 object_p*
