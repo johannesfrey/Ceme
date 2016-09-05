@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 
+#include "scanner.h"
 #include "memory.h"
 
-object* read_object(FILE *in_stream);
+object* read_object(scanner_t *scanner);
 
 #endif

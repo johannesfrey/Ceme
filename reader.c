@@ -6,155 +6,69 @@
 #include "reader.h"
 #include "symbol_table.h"
 
-void 
-skip_whitespace(FILE *in_stream)
-{
-    int ch;
+#define internal static
 
-    while ((ch = getc(in_stream)) != EOF) {
-        if (isspace(ch)) {
-            continue;
-        }
-        ungetc(ch, in_stream);
-        break;
-    }
-}
-
-object_p
-read_number(FILE *in_stream, int first)
-{
-    int ch;
-    int val = 0;
-
-    // ASCII digits are encoded ascending so we can
-    // subtract by char 0 for the real value
-    val = first - '0';
-    while (isdigit(ch = getc(in_stream))) {
-        val = val * 10 + (ch - '0');
-    }
-    ungetc(ch, in_stream);
-
-    return alloc_number(val);
-}
-
-object_p
-read_string(FILE *in_stream)
-{
-    int ch;
-    char *chars = NULL;
-    int current_buffer_size = 64;
-    int current_used_size = 0;
-
-    chars = malloc(current_buffer_size);
-    ch = getc(in_stream);
-
-    while ((ch != '"') && (ch != EOF)) {
-        // Check for special characters
-        if (ch == '\\') {
-            ch = getc(in_stream);
-            switch (ch) {
-                case EOF:
-                    log_err("Unterminated string");
-                    break;
-                case 'r':
-                    ch = '\r';
-                    break;
-                case 't':
-                    ch = '\t';
-                    break;
-                case 'n':
-                    ch = '\n';
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        chars[current_used_size++] = ch;
-        if (current_used_size == current_buffer_size) {
-            int new_buffer_size = current_buffer_size * 2;
-
-            chars = realloc(chars, new_buffer_size);
-            current_buffer_size = new_buffer_size;
-        }
-
-        ch = getc(in_stream);
-    }
-    // Trim to actual size and force append NUL character
-    chars = realloc(chars, current_used_size+1);
-    chars[current_used_size] = '\0';
-
-    return alloc_string(chars);
-}
+internal object_p read_list(scanner_t *scanner);
+internal object_p read_symbol(bstring slice);
+internal object_p read_number(bstring slice);
+internal int is_all_digit(const_bstring bstr);
 
 object_p 
-read_symbol(FILE *in_stream)
+read_object(scanner_t *scanner)
 {
     int ch;
-    char *chars = NULL;
-    int current_buffer_size = 64;
-    int current_used_size = 0;
 
-    chars = malloc(current_buffer_size);
-    ch = getc(in_stream);
+    scm_scan_skip_while(scanner, isspace);
+    ch = scm_scan_next_char(scanner);
 
-    while (!(isspace(ch)) && (ch != '(') && (ch != ')') && (ch != EOF)) {
-        chars[current_used_size++] = ch;
-        if (current_used_size == current_buffer_size) {
-            int new_buffer_size = current_buffer_size * 2;
-
-            chars = realloc(chars, new_buffer_size);
-            current_buffer_size = new_buffer_size;
-        }
-
-        ch = getc(in_stream);
+    if (ch == '(') {
+        return read_list(scanner);
     }
-    // Trim to actual size and force append NUL character
-    chars[current_used_size] = '\0';
-    ungetc(ch, in_stream);
-
-    if (strcmp(chars, "nil") == 0) {
-        free(chars);
+    if (ch == '"') {
+        bstring slice = scm_scan_until(scanner, "\"");
+        scm_scan_move_forward(scanner, 1);
+        return alloc_string(slice);
+    }
+    if (ch == EOF) {
         return nil_object;
     }
-    if (chars[0] == '#') {
-        if (strcmp(chars, "#t") == 0) {
-            free(chars);
-            return true_object;
-        }
-        if (strcmp(chars, "#f") == 0) {
-            free(chars);
-            return false_object;
-        }
+    else { // digit or symbol
+        scm_scan_move_backward(scanner, 1);
+        bstring slice = scm_scan_until(scanner, "\"\'(); \n");
+
+        if (slice->slen < 1)
+            return nil_object;
+
+        if (is_all_digit(slice))
+            return read_number(slice);
+
+        return read_symbol(slice);
     }
-
-    chars = realloc(chars, current_used_size+1);
-    chars[current_used_size] = '\0';
-    // Do not free chars here, as alloc_symbol does not
-    // alloc the string value by itself
-
-    return symbol_table_get_or_put(chars);
 }
 
-object_p
-read_list(FILE *input)
+internal object_p
+read_list(scanner_t *scanner)
 {
     int ch;
+
     // Every list corresponds to a cons; init with nil for car and cdr
     object_p start_list = alloc_cons(nil_object, nil_object);
     object_p current = start_list;
-    skip_whitespace(input);
+    scm_scan_skip_while(scanner, isspace);
 
-    ch = getc(input);
+    ch = scm_scan_next_char(scanner);
+
     if (ch == ')')
         return nil_object;
-    ungetc(ch, input);
+
+    scm_scan_move_backward(scanner, 1);
 
     for (;;) {
-        current->cons.car = read_object(input);
-        skip_whitespace(input);
+        current->cons.car = read_object(scanner);
+        scm_scan_skip_while(scanner, isspace);
 
-        ch = getc(input);
+        ch = scm_scan_next_char(scanner);
+
         if (ch == ')') {
             current->cons.cdr = nil_object;
             break;
@@ -162,7 +76,7 @@ read_list(FILE *input)
         if (ch == EOF) {
             return nil_object;
         }
-        ungetc(ch, input);
+        scm_scan_move_backward(scanner, 1);
 
         // Guarantee that the cdr of the current list is also a cons
         // and set it as the current one for the next loop iteration.
@@ -173,27 +87,52 @@ read_list(FILE *input)
     return start_list;
 }
 
-object_p 
-read_object(FILE *in_stream)
+internal object_p
+read_symbol(bstring slice)
 {
-    int ch;
+    if (biseqcstr(slice, "nil")) {
+        bdestroy(slice);
+        return nil_object;
+    }
+    if (slice->data[0] == '#') {
+        if (biseqcstr(slice, "#t")) {
+            bdestroy(slice);
+            return true_object;
+        }
+        if (biseqcstr(slice, "#f")) {
+            bdestroy(slice);
+            return false_object;
+        }
+    }
 
-    skip_whitespace(in_stream);
+    // Do not free slice here, as alloc_symbol does not
+    // alloc the string value by itself
 
-    ch = getc(in_stream);
-
-    if (isdigit(ch)) {
-        return read_number(in_stream, ch);
-    }
-    if (ch == '(') {
-        return read_list(in_stream);
-    }
-    if (ch == '"') {
-        return read_string(in_stream);
-    }
-    else {
-        ungetc(ch, in_stream);
-        return read_symbol(in_stream);
-    }
+    return symbol_table_get_or_put((char *)slice->data);
 }
 
+internal object_p
+read_number(bstring slice)
+{
+    int val;
+
+    // TODO: negative numbers
+
+    val = atoi((char *)slice->data);
+
+    bdestroy(slice);
+
+    return alloc_number(val);
+}
+
+internal int
+is_all_digit(const_bstring bstr)
+{
+    int i;
+
+    for (i = 0; i < bstr->slen; i++) {
+        if (!isdigit(bstr->data[i]))
+            return 0;
+    }
+    return 1;
+}
