@@ -15,32 +15,32 @@ test_environment()
     object_p key_bar = symbol_table_get_or_put("bar");
     
     // Global env
-    val_obtained = global_env_get(VALUE, key_foo);
+    val_obtained = global_env_get_value(key_foo);
     check(val_obtained == NULL, "There shouldn't be anything in the global env at this point");
-    entry_obtained = global_env_get(ENTRY, key_foo);
+    entry_obtained = global_env_get_entry(key_foo);
     check(entry_obtained == nil_object, "There shouldn't be anything in the global env at this point");
 
     val_foo_number = alloc_number(0xF000);
-    global_env_store(CREATE, key_foo, val_foo_number);
-    val_obtained = global_env_get(VALUE, key_foo);
+    global_env_put(key_foo, val_foo_number);
+    val_obtained = global_env_get_value(key_foo);
     check(val_obtained == val_foo_number, "Error in global env lookup (CREATE)");
     val_foo_number2 = alloc_number(0x000F);
-    global_env_store(MODIFY, key_foo, val_foo_number2);
-    val_obtained = global_env_get(VALUE, key_foo);
+    global_env_set(key_foo, val_foo_number2);
+    val_obtained = global_env_get_value(key_foo);
     check(val_obtained == val_foo_number2, "Error in global env lookup (MODIFY)");
     
     val_string = alloc_string("BAR");
-    global_env_store(CREATE, key_bar, val_string);
-    val_obtained = global_env_get(VALUE, key_bar);
+    global_env_put(key_bar, val_string);
+    val_obtained = global_env_get_value(key_bar);
     check(val_obtained == val_string, "Error in global env lookup");
 
     // Local env
     val_bar_number = alloc_number(0xBAAA);
     local_env = alloc_env(1, global_env);
-    local_env_store(CREATE, local_env, key_bar, val_bar_number);
-    val_obtained = local_env_get(VALUE, local_env, key_bar);
+    local_env_put(local_env, key_bar, val_bar_number);
+    val_obtained = local_env_get_value(local_env, key_bar);
     check(val_obtained == val_bar_number, "Error in global env lookup");
-    entry_obtained = local_env_get(ENTRY, local_env, key_bar);
+    entry_obtained = local_env_get_entry(local_env, key_bar);
     check(entry_obtained->any.tag == T_ENV_BINDING, "(Local) environment entry should be of type cons");
 
     return 0;
