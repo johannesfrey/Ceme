@@ -100,6 +100,36 @@ builtin_cons(cont_p cont)
     CP_RETURN(cont, alloc_cons(first_arg, second_arg));
 }
 
+cont_p
+builtin_car(cont_p cont)
+{
+    object_p arg_list = cont->args_locals[0];
+    object_p arg = CAR(arg_list);
+
+    scm_check(IS_CONS(arg), "(car): Argument "
+                            "is not a cons");
+
+    CP_RETURN(cont, CAR(arg));
+    
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
+builtin_cdr(cont_p cont)
+{
+    object_p arg_list = cont->args_locals[0];
+    object_p arg = CAR(arg_list);
+
+    scm_check(IS_CONS(arg), "(cdr): Argument "
+                            "is not a cons");
+
+    CP_RETURN(cont, CDR(arg));
+    
+error:
+    longjmp(error_occured, 1);
+}
+
 cont_p builtin_if2(cont_p cont);
 
 cont_p
