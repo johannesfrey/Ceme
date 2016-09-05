@@ -27,7 +27,12 @@ scm_print_object(output_t *output, object_p obj)
             break;
 
         case T_CONS:
-            print_cons(output, obj);
+            if (CAR(obj) == define_symbol && IS_CONS(CDR(obj))) {
+                scm_out_printf(output, "'");
+                scm_print_object(output, CDR(obj));
+            } else {
+                print_cons(output, obj);
+            }
             break;
 
         case T_STRING:
