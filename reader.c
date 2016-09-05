@@ -32,7 +32,11 @@ read_object(scanner_t *scanner)
     if (ch == EOF) {
         return nil_object;
     }
-    else { // digit or symbol
+    if (ch == '\'') { // quote
+        object_p after_quote = read_object(scanner);
+        return alloc_cons(symbol_table_get_or_put("quote"),\
+                alloc_cons(after_quote, nil_object));
+    } else { // digit or symbol
         scm_scan_move_backward(scanner, 1);
         bstring slice = scm_scan_until(scanner, "\"\'(); \n");
 
