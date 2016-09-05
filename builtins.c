@@ -150,6 +150,31 @@ builtin_eq(cont_p cont)
     CP_RETURN(cont, ret_val);
 }
 
+cont_p
+builtin_eq_nr(cont_p cont)
+{
+    object_p arg_list, first_arg, second_arg, ret_val;
+
+    arg_list = cont->args_locals[0];
+    first_arg = CAR(arg_list);
+    second_arg = CAR(CDR(arg_list));
+    ret_val = false_object;
+
+    scm_check(IS_NUMBER(first_arg),\
+            "(=): First argument is not a number");
+    scm_check(IS_NUMBER(second_arg),\
+            "(=): Second argument is not a number");
+
+    ret_val = (NUMBER_VAL(first_arg) == NUMBER_VAL(second_arg))
+        ? true_object
+        : false_object;
+
+    CP_RETURN(cont, ret_val);
+
+error:
+    longjmp(error_occured, 1);
+}
+
 cont_p builtin_if2(cont_p cont);
 
 cont_p
