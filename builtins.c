@@ -90,6 +90,16 @@ error:
     longjmp(error_occured, 1);
 }
 
+cont_p
+builtin_cons(cont_p cont)
+{
+    object_p arg_list = cont->args_locals[0];
+    object_p first_arg = CAR(arg_list);
+    object_p second_arg = CAR(CDR(arg_list));
+
+    CP_RETURN(cont, alloc_cons(first_arg, second_arg));
+}
+
 cont_p builtin_if2(cont_p cont);
 
 cont_p

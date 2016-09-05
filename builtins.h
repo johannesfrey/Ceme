@@ -8,6 +8,7 @@ cont_p builtin_plus_selfeval(cont_p cont);
 cont_p builtin_minus(cont_p cont);
 cont_p builtin_times(cont_p cont);
 cont_p builtin_times_selfeval(cont_p cont);
+cont_p builtin_cons(cont_p cont);
 cont_p builtin_if(cont_p cont);
 cont_p builtin_if_selfeval(cont_p cont);
 cont_p builtin_lambda(cont_p cont);

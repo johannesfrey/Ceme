@@ -139,10 +139,10 @@ init_cont_list()
 internal void
 fill_initial_env()
 {
-    global_env_put(symbol_table_get_or_put("abc"), alloc_number(100));
     global_env_put(symbol_table_get_or_put("+"), alloc_builtin_func("+", builtin_plus, -1));
-    global_env_put(symbol_table_get_or_put("-"), alloc_builtin_func("-", builtin_minus, -1));
     global_env_put(symbol_table_get_or_put("*"), alloc_builtin_func("*", builtin_times, -1));
+    global_env_put(symbol_table_get_or_put("-"), alloc_builtin_func("-", builtin_minus, -1));
+    global_env_put(symbol_table_get_or_put("cons"), alloc_builtin_func("cons", builtin_cons, 2));
     global_env_put(symbol_table_get_or_put("if"), alloc_builtin_syntax("if", builtin_if, 3));
     global_env_put(symbol_table_get_or_put("define"), alloc_builtin_syntax("define", builtin_define, -1));
     global_env_put(symbol_table_get_or_put("lambda"), alloc_builtin_syntax("lambda", builtin_lambda, -1));
