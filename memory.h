@@ -229,6 +229,6 @@ extern object_p global_env;
 //
 
 object_p nil_object, void_object, true_object, false_object, eof_object;
-object_p define_symbol;
+object_p define_symbol, quote_symbol;
 
 #endif
