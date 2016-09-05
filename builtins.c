@@ -169,6 +169,8 @@ builtin_if(cont_p cont)
     if_expr = CAR(rest_list);
     rest_list = CDR(rest_list);
 
+    else_expr = CAR(rest_list);
+
     CP_CALL2(cont, scm_eval, env, cond_expr, builtin_if2);
 }
 
