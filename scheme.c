@@ -147,6 +147,7 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("cdr"), alloc_builtin_func("cdr", builtin_cdr, 1));
     global_env_put(symbol_table_get_or_put("eq?"), alloc_builtin_func("eq?", builtin_eq, 2));
     global_env_put(symbol_table_get_or_put("="), alloc_builtin_func("=", builtin_eq_nr, 2));
+    global_env_put(symbol_table_get_or_put("<"), alloc_builtin_func("<", builtin_lt_nr, 2));
 
     global_env_put(symbol_table_get_or_put("if"), alloc_builtin_syntax("if", builtin_if, 3));
     global_env_put(symbol_table_get_or_put("define"), alloc_builtin_syntax("define", builtin_define, -1));
