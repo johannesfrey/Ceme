@@ -148,6 +148,7 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("<"), alloc_builtin_func("<", builtin_is_lt_nr, 2));
 
     global_env_put(symbol_table_get_or_put("number?"), alloc_builtin_func("number?", builtin_is_number, 1));
+    global_env_put(symbol_table_get_or_put("symbol?"), alloc_builtin_func("symbol?", builtin_is_symbol, 1));
     global_env_put(symbol_table_get_or_put("cons?"), alloc_builtin_func("cons?", builtin_is_cons, 1));
 
     global_env_put(symbol_table_get_or_put("cons"), alloc_builtin_func("cons", builtin_cons, 2));
