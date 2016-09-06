@@ -9,6 +9,8 @@ cont_p builtin_times(cont_p cont);
 cont_p builtin_cons(cont_p cont);
 cont_p builtin_car(cont_p cont);
 cont_p builtin_cdr(cont_p cont);
+cont_p builtin_setcar(cont_p cont);
+cont_p builtin_setcdr(cont_p cont);
 cont_p builtin_is_eq(cont_p cont);
 cont_p builtin_is_eq_nr(cont_p cont);
 cont_p builtin_is_lt_nr(cont_p cont);

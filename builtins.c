@@ -131,6 +131,46 @@ error:
 }
 
 cont_p
+builtin_setcar(cont_p cont)
+{
+    object_p arg_list, new_car, cons;
+
+    arg_list = cont->args_locals[0];
+    cons = CAR(arg_list);
+    new_car = CAR(CDR(arg_list));
+
+    scm_check(IS_CONS(cons), "[set-car!]: Argument "
+                            "is not a cons");
+
+    SET_CAR(cons, new_car);
+
+    CP_RETURN(cont, void_object);
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
+builtin_setcdr(cont_p cont)
+{
+    object_p arg_list, new_cdr, cons;
+
+    arg_list = cont->args_locals[0];
+    cons = CAR(arg_list);
+    new_cdr = CAR(CDR(arg_list));
+
+    scm_check(IS_CONS(cons), "[set-cdr!]: Argument "
+                            "is not a cons");
+
+    SET_CDR(cons, new_cdr);
+
+    CP_RETURN(cont, void_object);
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
 builtin_is_eq(cont_p cont)
 {
     object_p arg_list, first_arg, second_arg, ret_val;
