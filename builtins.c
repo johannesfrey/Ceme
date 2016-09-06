@@ -201,6 +201,19 @@ error:
 }
 
 cont_p
+builtin_is_cons(cont_p cont)
+{
+    object_p arg_list, arg;
+
+    arg_list = cont->args_locals[0];
+    arg = CAR(arg_list);
+
+    object_p ret_val = IS_CONS(arg) ? true_object : false_object;
+
+    CP_RETURN(cont, ret_val);
+}
+
+cont_p
 builtin_lambda(cont_p cont)
 {
     object_p env = cont->args_locals[0];
