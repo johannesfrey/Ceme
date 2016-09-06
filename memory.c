@@ -87,19 +87,21 @@ alloc_cons(object_p car, object_p cdr)
 object_p
 alloc_vector(int length)
 {
-    struct vector_object *vector;
+    size_t vec_size;
     int i;
 
-    vector = (struct vector_object *)(malloc(sizeof(struct vector_object)
-                + sizeof(object_p) * (length - NUM_DUMMY_ALLOC)));
-    vector->tag = T_VECTOR;
-    vector->length = length;
+    vec_size = sizeof(struct vector_object) \
+        + sizeof(object_p) * (length - NUM_DUMMY_ALLOC);
+
+    object_p vec_obj = alloc_object(T_VECTOR, vec_size);
+
+    vec_obj->vector.length = length;
 
     for (i = 0; i < length; i++) {
-        vector->elements[i] = nil_object;
+        vec_obj->vector.elements[i] = nil_object;
     }
 
-    return (object_p)vector;
+    return vec_obj;
 }
 
 internal object_p

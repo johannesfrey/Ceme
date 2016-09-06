@@ -147,6 +147,7 @@ typedef union object {
     struct string_object string;
     struct symbol_object symbol;
     struct cons_object cons;
+    struct vector_object vector;
     struct env_object env;
     struct builtin_object builtin;
     struct userdefined_object userdefined;
