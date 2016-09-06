@@ -232,7 +232,7 @@ alloc_symbol_table(int size)
 {
     object_p *symbol_table;
 
-    symbol_table = (object_p *)(malloc(sizeof(object_p) * size));
+    symbol_table = malloc(sizeof(object_p) * size);
 
     return symbol_table;
 }
