@@ -34,12 +34,12 @@ init_wellknown_objects()
 object_p 
 alloc_number(int64_t value)
 {
-    struct number_object *num_obj;
-    num_obj = (struct number_object *)(malloc(sizeof(struct number_object)));
-    num_obj->tag = T_NUMBER;
-    num_obj->value = value;
+    object_p num_obj = alloc_object(T_NUMBER,\
+            sizeof(struct number_object));
 
-    return (object_p)num_obj;
+    num_obj->number.value = value;
+
+    return num_obj;
 }
 
 object_p 
