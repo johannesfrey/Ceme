@@ -22,7 +22,7 @@ internal void init_cont_list();
 internal void fill_initial_env();
 internal cont_p repl(cont_p cont);
 internal cont_p repl2(cont_p cont);
-internal cont_p read_expression(cont_p cont);
+internal cont_p repl3(cont_p cont);
 internal cont_p finish(cont_p cont);
 internal void trampoline(cont_p cont);
 
@@ -76,22 +76,22 @@ repl(cont_p cont)
         complete = scm_scan_expression(&scan_obj->scanner);
     } while (!complete);
 
-    CP_TAILCALL2(cont, read_expression, scan_obj, out_obj);
+    CP_TAILCALL2(cont, repl2, scan_obj, out_obj);
 }
 
 internal cont_p
-read_expression(cont_p cont)
+repl2(cont_p cont)
 {
     object_p scan_obj = cont->args_locals[0];
     object_p obj;
 
     obj = read_object(&scan_obj->scanner);
 
-    CP_CALL2(cont, scm_eval, global_env, obj, repl2);
+    CP_CALL2(cont, scm_eval, global_env, obj, repl3);
 }
 
 internal cont_p
-repl2(cont_p cont)
+repl3(cont_p cont)
 {
     object_p obj = cont->ret_val;
     object_p scan_obj = cont->args_locals[0];
@@ -103,7 +103,7 @@ repl2(cont_p cont)
     }
 
     if (!scm_scan_is_end(&scan_obj->scanner))
-        CP_TAILCALL2(cont, read_expression, scan_obj, out_obj);
+        CP_TAILCALL2(cont, repl2, scan_obj, out_obj);
 
     CP_TAILCALL2(cont, repl, scan_obj, out_obj);
 }
