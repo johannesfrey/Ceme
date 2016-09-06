@@ -12,6 +12,7 @@ cont_p builtin_cdr(cont_p cont);
 cont_p builtin_is_eq(cont_p cont);
 cont_p builtin_is_eq_nr(cont_p cont);
 cont_p builtin_is_lt_nr(cont_p cont);
+cont_p builtin_is_number(cont_p cont);
 cont_p builtin_is_cons(cont_p cont);
 
 cont_p builtin_lambda(cont_p cont);
