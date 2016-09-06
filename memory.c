@@ -74,14 +74,13 @@ alloc_cons(object_p car, object_p cdr)
     }
 
     {
-        struct cons_object *cons_obj;
+        object_p cons_obj = alloc_object(T_CONS,\
+                sizeof(struct cons_object));
 
-        cons_obj = (struct cons_object *)(malloc(sizeof(struct cons_object)));
-        cons_obj->tag = T_CONS;
-        cons_obj->car = car;
-        cons_obj->cdr = cdr;
+        cons_obj->cons.car = car;
+        cons_obj->cons.cdr = cdr;
 
-        return (object_p)cons_obj;
+        return cons_obj;
     }
 }
 
