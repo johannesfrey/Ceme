@@ -45,12 +45,12 @@ alloc_number(int64_t value)
 object_p 
 alloc_string(bstring value)
 {
-    struct string_object *str_obj;
-    str_obj = (struct string_object *)(malloc(sizeof(struct string_object)));
-    str_obj->tag = T_STRING;
-    str_obj->value = value;
+    object_p str_obj = alloc_object(T_STRING,\
+            sizeof(struct string_object));
 
-    return (object_p)str_obj;
+    str_obj->string.value = value;
+
+    return str_obj;
 }
 
 object_p 
