@@ -130,6 +130,7 @@ reset_scanner_after_complete_expr(scanner_t *scanner)
     scanner->nparens_expected = 0;
     scanner->str_pending = 0;
     scanner->pending = 0;
+    scanner->eof = 0;
 }
 
 internal int
@@ -141,7 +142,7 @@ check_if_expr_complete(scanner_t *scanner)
     int rc = 0;
     char c;
 
-    while (scanner->scan_pos < scm_scan_length(scanner)) {
+    while (!scm_scan_is_end(scanner)) {
         c = scm_scan_next_char(scanner);
 
         switch (c) {

@@ -22,7 +22,7 @@ bstring scm_scan_while(scanner_t *scanner, scan_check_func_t cf);
 int scm_scan_input(scanner_t *scanner);
 int scm_scan_expression(scanner_t *scanner);
 
-#define scm_scan_is_end(A)  ((scm_scan_pos(A) >= scm_scan_length(A)) ? 1 : 0)
+#define scm_scan_is_end(A)  ((scm_scan_pos(A) >= scm_scan_length(A) || (A)->eof) ? 1 : 0)
 #define scm_scan_length(A)  ((A)->input->slen-1)
 #define scm_scan_pos(A)     ((A)->scan_pos)
 
