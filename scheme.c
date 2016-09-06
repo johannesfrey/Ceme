@@ -151,6 +151,7 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("symbol?"), alloc_builtin_func("symbol?", builtin_is_symbol, 1));
     global_env_put(symbol_table_get_or_put("string?"), alloc_builtin_func("string?", builtin_is_string, 1));
     global_env_put(symbol_table_get_or_put("cons?"), alloc_builtin_func("cons?", builtin_is_cons, 1));
+    global_env_put(symbol_table_get_or_put("function?"), alloc_builtin_func("function?", builtin_is_function, 1));
 
     global_env_put(symbol_table_get_or_put("cons"), alloc_builtin_func("cons", builtin_cons, 2));
     global_env_put(symbol_table_get_or_put("car"), alloc_builtin_func("car", builtin_car, 1));

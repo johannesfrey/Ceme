@@ -16,6 +16,7 @@ cont_p builtin_is_number(cont_p cont);
 cont_p builtin_is_symbol(cont_p cont);
 cont_p builtin_is_string(cont_p cont);
 cont_p builtin_is_cons(cont_p cont);
+cont_p builtin_is_function(cont_p cont);
 
 cont_p builtin_lambda(cont_p cont);
 cont_p builtin_define(cont_p cont);
