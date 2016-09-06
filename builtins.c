@@ -354,6 +354,13 @@ builtin_if2(cont_p cont)
     #undef env
 }
 
+cont_p
+builtin_quote(cont_p cont)
+{
+    object_p arg_list = cont->args_locals[1];
+
+    CP_RETURN(cont, CAR(arg_list));
+}
 
 internal int
 is_define(object_p expr)
