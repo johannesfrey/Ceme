@@ -56,12 +56,12 @@ alloc_string(bstring value)
 object_p 
 alloc_symbol(char *value)
 {
-    struct symbol_object *sym_obj;
-    sym_obj = (struct symbol_object *)(malloc(sizeof(struct symbol_object)));
-    sym_obj->tag = T_SYMBOL;
-    sym_obj->value = value;
+    object_p sym_obj = alloc_object(T_SYMBOL,\
+            sizeof(struct symbol_object));
 
-    return (object_p)sym_obj;
+    sym_obj->symbol.value = value;
+
+    return sym_obj;
 }
 
 object_p 
