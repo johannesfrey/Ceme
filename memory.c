@@ -7,7 +7,7 @@
 
 #define internal static
 
-object_p
+internal object_p
 alloc_object(object_tag tag, size_t size)
 {
     object_p ptr = malloc(size);
