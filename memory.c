@@ -174,21 +174,20 @@ alloc_userdefined_syntax(char *name, object_p param_list,\
 object_p
 alloc_scanner(FILE *file)
 {
-    scanner_t *scanner;
+    object_p scan_obj = alloc_object(T_SCANNER,\
+            sizeof(scanner_t));
 
-    scanner = (scanner_t *)(malloc(sizeof(scanner_t)));
-    scanner->tag = T_SCANNER;
-    scanner->file = file;
-    scanner->input = bfromcstr("");
-    scanner->scan_pos = 0;
-    scanner->expr_start = 0;
-    scanner->expr_end = 0;
-    scanner->eof = 0;
-    scanner->nparens_expected = 0;
-    scanner->str_pending = 0;
-    scanner->pending = 0;
+    scan_obj->scanner.file = file;
+    scan_obj->scanner.input = bfromcstr("");
+    scan_obj->scanner.scan_pos = 0;
+    scan_obj->scanner.expr_start = 0;
+    scan_obj->scanner.expr_end = 0;
+    scan_obj->scanner.eof = 0;
+    scan_obj->scanner.nparens_expected = 0;
+    scan_obj->scanner.str_pending = 0;
+    scan_obj->scanner.pending = 0;
 
-    return (object_p)scanner;
+    return scan_obj;
 }
 
 object_p
