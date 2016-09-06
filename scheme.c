@@ -155,6 +155,7 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("syntax?"), alloc_builtin_func("syntax?", builtin_is_syntax, 1));
     global_env_put(symbol_table_get_or_put("builtin-function?"), alloc_builtin_func("builtin-function?", builtin_is_builtin_function, 1));
     global_env_put(symbol_table_get_or_put("builtin-syntax?"), alloc_builtin_func("builtin-syntax?", builtin_is_builtin_syntax, 1));
+    global_env_put(symbol_table_get_or_put("binding?"), alloc_builtin_func("binding?", builtin_is_binding, 1));
 
     global_env_put(symbol_table_get_or_put("cons"), alloc_builtin_func("cons", builtin_cons, 2));
     global_env_put(symbol_table_get_or_put("car"), alloc_builtin_func("car", builtin_car, 1));

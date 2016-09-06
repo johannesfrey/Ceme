@@ -305,6 +305,25 @@ builtin_is_builtin_syntax(cont_p cont)
 }
 
 cont_p
+builtin_is_binding(cont_p cont)
+{
+    object_p arg_list, arg, env_entry, ret_val;
+
+    arg_list = cont->args_locals[0];
+    arg = CAR(arg_list);
+
+    scm_check(IS_SYMBOL(arg), "[builtin_is_binding]: Non-symbol received");
+
+    env_entry = env_get_entry(global_env, arg);
+    ret_val = IS_NIL(env_entry) ? false_object : true_object;
+
+    CP_RETURN(cont, ret_val);
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
 builtin_lambda(cont_p cont)
 {
     object_p env = cont->args_locals[0];
