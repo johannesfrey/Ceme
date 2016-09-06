@@ -36,7 +36,7 @@ test_environment()
 
     // Local env
     val_bar_number = alloc_number(0xBAAA);
-    local_env = alloc_env(1, global_env);
+    local_env = alloc_local_env(1, global_env);
     local_env_put(local_env, key_bar, val_bar_number);
     val_obtained = local_env_get_value(local_env, key_bar);
     check(val_obtained == val_bar_number, "Error in global env lookup");

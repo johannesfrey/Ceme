@@ -204,7 +204,7 @@ object_p alloc_symbol(char *value);
 object_p alloc_cons(object_p car, object_p cdr);
 object_p* alloc_symbol_table(int size);
 object_p alloc_global_env(int length);
-object_p alloc_env(int length, object_p parent);
+object_p alloc_local_env(int length, object_p parent);
 object_p alloc_global_env(int length);
 object_p alloc_vector(int length);
 object_p alloc_builtin_func(char *name, cont_func_t func, int num_params);

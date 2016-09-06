@@ -237,42 +237,45 @@ alloc_symbol_table(int size)
     return symbol_table;
 }
 
-object_p
-alloc_env(int length, object_p parent)
+internal object_p
+alloc_env(object_tag tag, int length, object_p parent)
 {
     // slots above bindings slot in env_object + the number of bindings
-    int alloc_size = offsetof(struct env_object, bindings) + sizeof(env_binding_t)*length;
+    size_t alloc_size = offsetof(struct env_object, bindings) + sizeof(env_binding_t)*length;
 
     check((parent == NULL ||
             (parent->any.tag == T_LOCALENV ||
              parent->any.tag == T_GLOBALENV)), "Invalid parent environment given!");
 
-    object_p new_env = (object_p)(malloc(alloc_size));
+    object_p env_obj = alloc_object(tag, alloc_size);
 
-    new_env->env.tag = T_LOCALENV;
-    new_env->env.parent = parent;
-    new_env->env.length = length;
+    env_obj->env.parent = parent;
+    env_obj->env.length = length;
 
     for (int i = 0; i < length; i++) {
-        new_env->env.bindings[i].tag = T_ENV_BINDING;
-        new_env->env.bindings[i].car = nil_object;
-        new_env->env.bindings[i].cdr = nil_object;
+        env_obj->env.bindings[i].tag = T_ENV_BINDING;
+        env_obj->env.bindings[i].car = nil_object;
+        env_obj->env.bindings[i].cdr = nil_object;
     }
 
-    return new_env;
+    return env_obj;
 
 error:
     abort();
 }
 
 object_p
+alloc_local_env(int length, object_p parent)
+{
+    object_p env_obj = alloc_env(T_LOCALENV, length, parent);
+
+    return env_obj;
+}
+
+object_p
 alloc_global_env(int length)
 {
-    object_p new_env;
+    object_p env_obj = alloc_env(T_GLOBALENV, length, NULL);
 
-    new_env = alloc_env(length, NULL);
-    new_env->env.tag = T_GLOBALENV;
-    new_env->env.parent = NULL;
-
-    return new_env;
+    return env_obj;
 }

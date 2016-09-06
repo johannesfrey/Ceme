@@ -194,7 +194,7 @@ eval_userdefined(cont_p cont)
     num_locals = evaled_func_slot->userdefined.num_locals;
 
     // For userdefined objects create a new env first
-    new_env = alloc_env(num_params+num_locals, evaled_func_slot->userdefined.home_env);
+    new_env = alloc_local_env(num_params+num_locals, evaled_func_slot->userdefined.home_env);
 
     CP_JUMP(cont, eval_userdefined2);
 }
