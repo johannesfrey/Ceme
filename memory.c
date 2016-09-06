@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stddef.h>
+#include <assert.h>
 
-#include "dbg.h"
+#include "logger.h"
 #include "memory.h"
 #include "symbol_table.h"
 
@@ -68,7 +69,7 @@ object_p
 alloc_cons(object_p car, object_p cdr)
 {
     if (car == NULL || cdr == NULL) {
-        log_warn("Trying to allocate cons with NULL pointer as member");
+        scm_log_warn("Trying to allocate cons with NULL pointer as member");
 
         return nil_object;
     }
@@ -243,9 +244,9 @@ alloc_env(object_tag tag, int length, object_p parent)
     // slots above bindings slot in env_object + the number of bindings
     size_t alloc_size = offsetof(struct env_object, bindings) + sizeof(env_binding_t)*length;
 
-    check((parent == NULL ||
-            (parent->any.tag == T_LOCALENV ||
-             parent->any.tag == T_GLOBALENV)), "Invalid parent environment given!");
+    assert((tag == T_GLOBALENV || tag == T_LOCALENV) && "[alloc_env]: Wrong environment type");
+    assert((parent == NULL || (TAG(parent) == T_LOCALENV || TAG(parent) == T_GLOBALENV))\
+            && "[alloc_env]: Wrong parent environment received");
 
     object_p env_obj = alloc_object(tag, alloc_size);
 
@@ -259,9 +260,6 @@ alloc_env(object_tag tag, int length, object_p parent)
     }
 
     return env_obj;
-
-error:
-    abort();
 }
 
 object_p
