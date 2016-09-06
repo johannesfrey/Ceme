@@ -217,15 +217,14 @@ alloc_output_strbuf()
 cont_p
 alloc_continuation()
 {
-    cont_p continuation;
+    cont_p cont = malloc(sizeof(struct continuation_object));
 
-    continuation = (cont_p)(malloc(sizeof(struct continuation_object)));
-    continuation->tag = T_CONTINUATION;
-    continuation->caller = NULL;
-    continuation->next = NULL;
-    continuation->ret_val = NULL;
+    cont->tag = T_CONTINUATION;
+    cont->caller = NULL;
+    cont->next = NULL;
+    cont->ret_val = NULL;
 
-    return continuation;
+    return cont;
 }
 
 object_p*
