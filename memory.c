@@ -139,18 +139,16 @@ alloc_userdefined_object(object_tag tag, char *name,\
         object_p param_list, object_p body_list,\
         object_p env)
 {
-    struct userdefined_object *ud_obj;
-    ud_obj = malloc(sizeof(struct userdefined_object));
+    object_p ud_obj = alloc_object(tag, sizeof(struct userdefined_object));
 
-    ud_obj->tag = tag;
-    ud_obj->name = symbol_table_get_or_put(name);
-    ud_obj->param_list = param_list;
-    ud_obj->body_list = body_list;
-    ud_obj->num_params = 0;
-    ud_obj->num_locals = 0;
-    ud_obj->home_env = env;
+    ud_obj->userdefined.name = symbol_table_get_or_put(name);
+    ud_obj->userdefined.param_list = param_list;
+    ud_obj->userdefined.body_list = body_list;
+    ud_obj->userdefined.num_params = 0;
+    ud_obj->userdefined.num_locals = 0;
+    ud_obj->userdefined.home_env = env;
 
-    return (object_p)ud_obj;
+    return ud_obj;
 }
 
 object_p
