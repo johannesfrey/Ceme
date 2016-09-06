@@ -131,7 +131,7 @@ error:
 }
 
 cont_p
-builtin_eq(cont_p cont)
+builtin_is_eq(cont_p cont)
 {
     object_p arg_list, first_arg, second_arg, ret_val;
 
@@ -151,7 +151,7 @@ builtin_eq(cont_p cont)
 }
 
 cont_p
-builtin_eq_nr(cont_p cont)
+builtin_is_eq_nr(cont_p cont)
 {
     object_p arg_list, first_arg, second_arg, ret_val;
 
@@ -176,7 +176,7 @@ error:
 }
 
 cont_p
-builtin_lt_nr(cont_p cont)
+builtin_is_lt_nr(cont_p cont)
 {
     object_p arg_list, first_arg, second_arg, ret_val;
 
