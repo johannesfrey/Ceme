@@ -107,15 +107,13 @@ alloc_vector(int length)
 internal object_p
 alloc_builtin_object(object_tag tag, char *name, cont_func_t func, int num_params)
 {
-    struct builtin_object *b_obj;
-    b_obj = malloc(sizeof(struct builtin_object));
+    object_p bi_obj = alloc_object(tag, sizeof(struct builtin_object));
 
-    b_obj->tag = tag;
-    b_obj->name = symbol_table_get_or_put(name);
-    b_obj->func = func;
-    b_obj->num_params = num_params;
+    bi_obj->builtin.name = symbol_table_get_or_put(name);
+    bi_obj->builtin.func = func;
+    bi_obj->builtin.num_params = num_params;
 
-    return (object_p)b_obj;
+    return bi_obj;
 }
 
 object_p
