@@ -19,20 +19,13 @@ alloc_object(object_tag tag, size_t size)
 void 
 init_wellknown_objects()
 {
-    nil_object = (object_p)(malloc(sizeof(struct any_object)));
-    nil_object->any.tag = T_NIL;
+    size_t any_obj_size = sizeof(struct any_object);
 
-    void_object = (object_p)(malloc(sizeof(struct any_object)));
-    void_object->any.tag = T_VOID;
-
-    true_object = (object_p)(malloc(sizeof(struct any_object)));
-    true_object->any.tag = T_TRUE;
-
-    false_object = (object_p)(malloc(sizeof(struct any_object)));
-    false_object->any.tag = T_FALSE;
-
-    eof_object = (object_p)(malloc(sizeof(struct any_object)));
-    eof_object->any.tag = T_EOF;
+    nil_object = alloc_object(T_NIL, any_obj_size);
+    void_object = alloc_object(T_VOID, any_obj_size);
+    true_object = alloc_object(T_TRUE, any_obj_size);
+    false_object = alloc_object(T_FALSE, any_obj_size);
+    eof_object = alloc_object(T_EOF, any_obj_size);
 
     define_symbol = symbol_table_get_or_put("define");
     quote_symbol = symbol_table_get_or_put("quote");
