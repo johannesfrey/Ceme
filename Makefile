@@ -1,4 +1,3 @@
-CC			= clang
 CFLAGS			= -Wall -std=c99
 DEBUG_BUILD		=
 OBJS			= memory.o builtins.o continuation_passing.o reader.o eval.o printer.o symbol_table.o environment.o scanner.o bstrlib.o logger.o output.o
