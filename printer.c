@@ -61,7 +61,7 @@ scm_print_object(output_t *output, object_p obj)
             break;
 
         case T_USERDEFINED_FUNC:
-            scm_out_printf(output, "<lambda>");
+            scm_out_printf(output, "<procedure: %s>", USERDEFINED_NAME(obj));
             break;
 
         case T_SYMBOL:

@@ -424,7 +424,7 @@ builtin_lambda(cont_p cont)
         object_p new_udf;
         int num_params;
         
-        new_udf = alloc_userdefined_func("anon lambda", param_list,\
+        new_udf = alloc_userdefined_func("anonymous lambda", param_list,\
                                             body_list, env);
         num_params = count_params(param_list);
         scm_check(num_params >= 0, "(lambda): Invalid element in parameter list");
@@ -475,7 +475,7 @@ builtin_define(cont_p cont)
             object_p new_udf;
             int num_params;
 
-            new_udf = alloc_userdefined_func("anon lambda", param_list,\
+            new_udf = alloc_userdefined_func(SYMBOL_VAL(name), param_list,\
                                                 body_list, env);
             num_params = count_params(param_list);
             scm_check(num_params >= 0, "(define): Invalid element in parameter list");
