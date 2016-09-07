@@ -45,9 +45,5 @@ symbol_table.o: symbol_table.h symbol_table.c memory.o
 environment.o: environment.h environment.c memory.o logger.o
 	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c environment.c
 
-run: tests/*.c scheme
-	cd tests; make tests
-
 clean:
 	rm -rf $(OBJS) scheme *.dSYM
-	cd tests; make clean
