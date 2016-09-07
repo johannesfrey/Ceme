@@ -202,10 +202,12 @@ eval_userdefined(cont_p cont)
 internal cont_p
 eval_userdefined2(cont_p cont)
 {
-    if (IS_CONS(unevaled_arg_list)) {
+    if (IS_CONS(unevaled_arg_list) || IS_NIL(unevaled_arg_list)) {
         object_p unevaled_arg;
 
-        unevaled_arg = CAR(unevaled_arg_list);
+        unevaled_arg = IS_CONS(unevaled_arg_list)\
+                       ? CAR(unevaled_arg_list)
+                       : unevaled_arg_list;
 
         if (IS_SYMBOL(params)) {
             // nevermind, varargs
@@ -215,15 +217,14 @@ eval_userdefined2(cont_p cont)
             start_var_arg_cons = nil_object;
 
             CP_CALL2(cont, scm_eval, env, unevaled_arg, eval_userdefined3_1);
-        } else if (IS_CONS(params)) {
+        } else if (IS_CONS(params) || IS_NIL(params)) {
             // pre check the number of given arguments
             int num_params, num_args;
 
             num_params = evaled_func_slot->userdefined.num_params;
             num_args = count_args(unevaled_arg_list);
 
-            scm_check(num_params == num_args, \
-                "[eval_userdefined2]: Argument arity mismatch: "
+            scm_check(num_params == num_args, \ "[eval_userdefined2]: Argument arity mismatch: "
                 "Expected %d, received %d", num_params, num_args);
 
             CP_CALL2(cont, scm_eval, env, unevaled_arg, eval_userdefined3_2);
@@ -300,7 +301,8 @@ eval_userdefined3_2(cont_p cont)
         params = nil_object;
     }
 
-    env_put(new_env, param, evaled_arg);
+    if (!IS_NIL(param))
+        env_put(new_env, param, evaled_arg);
 
     if (IS_CONS(unevaled_arg_list))
         unevaled_arg_list = CDR(unevaled_arg_list);
