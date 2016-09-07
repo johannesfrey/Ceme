@@ -224,7 +224,7 @@ eval_userdefined2(cont_p cont)
             num_params = evaled_func_slot->userdefined.num_params;
             num_args = count_args(unevaled_arg_list);
 
-            scm_check(num_params == num_args, \ "[eval_userdefined2]: Argument arity mismatch: "
+            scm_check(num_params == num_args, "[eval_userdefined2]: Argument arity mismatch: "
                 "Expected %d, received %d", num_params, num_args);
 
             CP_CALL2(cont, scm_eval, env, unevaled_arg, eval_userdefined3_2);
@@ -248,7 +248,7 @@ eval_userdefined3_1(cont_p cont)
     cur_var_arg = alloc_cons(evaled_arg, nil_object);
 
     if (IS_NIL(start_var_arg_cons)) // starting point
-        start_var_arg_cons = cur_var_arg;
+        start_var_arg_cons = IS_NIL(evaled_arg) ? nil_object : cur_var_arg;
     else
         SET_CDR(last_var_arg_cons, cur_var_arg);
 
