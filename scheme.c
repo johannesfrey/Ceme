@@ -168,4 +168,5 @@ fill_initial_env()
     global_env_put(symbol_table_get_or_put("lambda"), alloc_builtin_syntax("lambda", builtin_lambda, -1));
     global_env_put(symbol_table_get_or_put("if"), alloc_builtin_syntax("if", builtin_if, 3));
     global_env_put(symbol_table_get_or_put("quote"), alloc_builtin_syntax("quote", builtin_quote, 1));
+    global_env_put(symbol_table_get_or_put("set!"), alloc_builtin_syntax("set!", builtin_set, 2));
 }

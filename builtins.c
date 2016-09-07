@@ -563,6 +563,50 @@ builtin_quote(cont_p cont)
     CP_RETURN(cont, CAR(arg_list));
 }
 
+internal cont_p builtin_set2(cont_p cont);
+
+cont_p
+builtin_set(cont_p cont)
+{
+    #define env		cont->args_locals[0]
+    object_p arg_list, expr;
+
+    arg_list = cont->args_locals[1];
+
+    #define var_name    cont->args_locals[1]
+    
+    var_name = CAR(arg_list);
+    scm_check(IS_SYMBOL(var_name), "[set!]: Argument "
+                        "is not a symbol");
+            
+    arg_list = CDR(arg_list);
+    expr = CAR(arg_list);
+    arg_list = CDR(arg_list);
+
+    if (IS_NIL(expr)) {
+        env_set(env, var_name, expr);
+        CP_RETURN(cont, void_object);
+    }
+
+    CP_CALL2(cont, scm_eval, env, expr, builtin_set2);
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
+builtin_set2(cont_p cont)
+{
+    object_p evaled_expr = cont->ret_val;
+
+    env_set(env, var_name, evaled_expr);
+
+    CP_RETURN(cont, void_object);
+
+    #undef var_name
+    #undef env
+}
+
 internal int
 is_define(object_p expr)
 {

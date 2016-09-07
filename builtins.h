@@ -29,5 +29,6 @@ cont_p builtin_lambda(cont_p cont);
 cont_p builtin_define(cont_p cont);
 cont_p builtin_if(cont_p cont);
 cont_p builtin_quote(cont_p cont);
+cont_p builtin_set(cont_p cont);
 
 #endif
