@@ -15,7 +15,7 @@ scheme: scheme.c $(OBJS)
 logger.o: logger.h logger.c output.o
 	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c logger.c
 
-memory.o: memory.h memory.c continuation_passing.h continuation_passing.c bstrlib.o
+memory.o: memory.h memory.c bstrlib.o
 	$(CC) $(CFLAGS) $(DEBUG_BUILD) -c memory.c
 
 builtins.o: builtins.h builtins.c memory.o continuation_passing.o eval.o
