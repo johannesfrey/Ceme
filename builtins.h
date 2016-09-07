@@ -6,6 +6,7 @@
 cont_p builtin_plus(cont_p cont);
 cont_p builtin_minus(cont_p cont);
 cont_p builtin_times(cont_p cont);
+cont_p builtin_divide(cont_p cont);
 cont_p builtin_cons(cont_p cont);
 cont_p builtin_car(cont_p cont);
 cont_p builtin_cdr(cont_p cont);

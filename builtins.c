@@ -32,27 +32,6 @@ error:
 }
 
 cont_p
-builtin_times(cont_p cont)
-{
-    object_p arg_list = cont->args_locals[0];
-    int product = 1;
-
-    while (!IS_NIL(arg_list)) {
-        object_p num_obj = CAR(arg_list);
-        scm_check(IS_NUMBER(num_obj), "(*): Argument "
-                                    "is not a number");
-
-        product *= NUMBER_VAL(num_obj);
-        arg_list = CDR(arg_list);
-    }
-
-    CP_RETURN(cont, alloc_number(product));
-
-error:
-    longjmp(error_occured, 1);
-}
-
-cont_p
 builtin_minus(cont_p cont)
 {
     object_p arg_list = cont->args_locals[0];
@@ -85,6 +64,65 @@ builtin_minus(cont_p cont)
     }
 
     CP_RETURN(cont, alloc_number(diff));
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
+builtin_times(cont_p cont)
+{
+    object_p arg_list = cont->args_locals[0];
+    int product = 1;
+
+    while (!IS_NIL(arg_list)) {
+        object_p num_obj = CAR(arg_list);
+        scm_check(IS_NUMBER(num_obj), "(*): Argument "
+                                    "is not a number");
+
+        product *= NUMBER_VAL(num_obj);
+        arg_list = CDR(arg_list);
+    }
+
+    CP_RETURN(cont, alloc_number(product));
+
+error:
+    longjmp(error_occured, 1);
+}
+
+cont_p
+builtin_divide(cont_p cont)
+{
+    object_p arg_list, first_arg;
+    int quotient;
+    
+    arg_list = cont->args_locals[0];
+    scm_check(IS_CONS(arg_list), "(/): Needs at least "
+                                "one argument"); 
+
+    first_arg = CAR(arg_list);
+    scm_check(IS_NUMBER(first_arg), "(/): Argument "
+                                "is not a number");
+
+    quotient = NUMBER_VAL(first_arg);
+    arg_list = CDR(arg_list);
+
+    // one element only -> (/ 1 first_arg)
+    if (IS_NIL(arg_list)) {
+        quotient = 1 / NUMBER_VAL(first_arg);
+        CP_RETURN(cont, alloc_number(quotient));
+    }
+
+    while (!IS_NIL(arg_list)) {
+        object_p num_obj = CAR(arg_list);
+        scm_check(IS_NUMBER(num_obj), "(/): Argument "
+                                    "is not a number");
+
+        quotient /= NUMBER_VAL(num_obj);
+        arg_list = CDR(arg_list);
+    }
+
+    CP_RETURN(cont, alloc_number(quotient));
 
 error:
     longjmp(error_occured, 1);
