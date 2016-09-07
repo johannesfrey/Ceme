@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <assert.h>
 
-#include "logger.h"
 #include "memory.h"
 #include "symbol_table.h"
 
@@ -68,11 +67,9 @@ alloc_symbol(char *value)
 object_p 
 alloc_cons(object_p car, object_p cdr)
 {
-    if (car == NULL || cdr == NULL) {
-        scm_log_warn("Trying to allocate cons with NULL pointer as member");
-
-        return nil_object;
-    }
+    assert(!((car == NULL || cdr == NULL)
+                && "[alloc_cons]: Trying to allocate cons "
+                "with NULL pointer as member"));
 
     {
         object_p cons_obj = alloc_object(T_CONS,\
