@@ -21,6 +21,8 @@ This is an experimental scheme interpreter written in C for the lecture "Design 
 3. Build
   - `make` for the regular build
   - `make debug` for the debug build
+4. Use
+  - run `./scheme` to start the REPL
 
 # Ingredients
 
