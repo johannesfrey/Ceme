@@ -107,6 +107,19 @@ Set a variable to a new value
 "bar"
 ```
 
+### Quoting input
+
+__`(quote expr)`__ or shorter: __`'expr`__
+
+Returns the unevaluated expr. Good for quickly creating lists.
+
+```
+>  (quote (1 2 3))
+(1 2 3)
+>  'foo
+foo
+```
+
 ## Builtin Functions
 
 ### Arithmetic Functions (only for Numbers)
