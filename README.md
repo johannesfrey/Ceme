@@ -275,3 +275,12 @@ __`(< expr expr)`__ Numbers only
 `(builtin-syntax? expr)`
 
 `(binding? expr)`
+
+# Todos and Problems
+
+* There is no garbage collection at the moment (naiv mallocing everywhere ;))
+* A wide range of builtin syntax and functions is still missing
+* Still enough edge cases where random errors creep in
+* Code style inconsistencies
+* Refactoring
+* Harness the power of continuations (call/cc etc.)
